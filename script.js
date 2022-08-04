@@ -9,12 +9,15 @@ const game = (() => {
     playerMove: [],
   };
 
-  for (let i = 0; i < 9; i++) {
-    const box = document.createElement("div");
-    box.classList.add(`box`);
-    storage.gameboard.push(box);
-    gameboardDisplay.appendChild(box);
-  }
+  const addGameBoard = () => {
+    for (let i = 0; i < 9; i++) {
+      const box = document.createElement("div");
+      box.classList.add("box");
+      box.classList.add(`${i}`);
+      storage.gameboard.push(box);
+      gameboardDisplay.appendChild(box);
+    }
+  };
 
   const selectPlayerMove = () => {
     const buttonX = document.createElement("button");
@@ -50,9 +53,6 @@ const game = (() => {
       storage.playerMove = [];
       storage.playerMove = storage.player2;
     }
-    console.log("works");
-    console.log(storage.playerMove);
-    console.log(storage.player2);
   };
 
   const displayGame = () => {
@@ -60,10 +60,82 @@ const game = (() => {
       if (e.target.classList.contains("box")) {
         if (e.target.textContent === "") {
           e.target.textContent = storage.playerMove;
+          win();
           return switchPlayerMove();
         }
       }
     });
   };
-  return { displayGame: displayGame(), selectPlayerMove: selectPlayerMove() };
+  const win = () => {
+    // O (player 1) win condition
+    if (
+      // check for 3-in-a-row horizontally
+      (storage.gameboard[0].textContent === "ｏ" &&
+        storage.gameboard[1].textContent === "ｏ" &&
+        storage.gameboard[2].textContent === "ｏ") ||
+      (storage.gameboard[3].textContent === "ｏ" &&
+        storage.gameboard[4].textContent === "ｏ" &&
+        storage.gameboard[5].textContent === "ｏ") ||
+      (storage.gameboard[6].textContent === "ｏ" &&
+        storage.gameboard[7].textContent === "ｏ" &&
+        storage.gameboard[8].textContent === "ｏ") ||
+      // check for 3-in-a-row vertically
+      (storage.gameboard[0].textContent === "ｏ" &&
+        storage.gameboard[3].textContent === "ｏ" &&
+        storage.gameboard[6].textContent === "ｏ") ||
+      (storage.gameboard[1].textContent === "ｏ" &&
+        storage.gameboard[4].textContent === "ｏ" &&
+        storage.gameboard[7].textContent === "ｏ") ||
+      (storage.gameboard[2].textContent === "ｏ" &&
+        storage.gameboard[5].textContent === "ｏ" &&
+        storage.gameboard[8].textContent === "ｏ") ||
+      // check for 3-in-a-row diagonally
+      (storage.gameboard[0].textContent === "ｏ" &&
+        storage.gameboard[4].textContent === "ｏ" &&
+        storage.gameboard[8].textContent === "ｏ") ||
+      (storage.gameboard[2].textContent === "ｏ" &&
+        storage.gameboard[4].textContent === "ｏ" &&
+        storage.gameboard[6].textContent === "ｏ")
+    ) {
+      console.log("Player 1 ez won");
+    }
+    // x (player 2) win condition
+    else if (
+      // check for 3-in-a-row horizontally
+      (storage.gameboard[0].textContent === "ｘ" &&
+        storage.gameboard[1].textContent === "ｘ" &&
+        storage.gameboard[2].textContent === "ｘ") ||
+      (storage.gameboard[3].textContent === "ｘ" &&
+        storage.gameboard[4].textContent === "ｘ" &&
+        storage.gameboard[5].textContent === "ｘ") ||
+      (storage.gameboard[6].textContent === "ｘ" &&
+        storage.gameboard[7].textContent === "ｘ" &&
+        storage.gameboard[8].textContent === "ｘ") ||
+      // check for 3-in-a-row vertically
+      (storage.gameboard[0].textContent === "ｘ" &&
+        storage.gameboard[3].textContent === "ｘ" &&
+        storage.gameboard[6].textContent === "ｘ") ||
+      (storage.gameboard[1].textContent === "ｘ" &&
+        storage.gameboard[4].textContent === "ｘ" &&
+        storage.gameboard[7].textContent === "ｘ") ||
+      (storage.gameboard[2].textContent === "ｘ" &&
+        storage.gameboard[5].textContent === "ｘ" &&
+        storage.gameboard[8].textContent === "ｘ") ||
+      // check for 3-in-a-row diagonally
+      (storage.gameboard[0].textContent === "ｘ" &&
+        storage.gameboard[4].textContent === "ｘ" &&
+        storage.gameboard[8].textContent === "ｘ") ||
+      (storage.gameboard[2].textContent === "ｘ" &&
+        storage.gameboard[4].textContent === "ｘ" &&
+        storage.gameboard[6].textContent === "ｘ")
+    ) {
+      console.log("Player 2 ez won");
+    }
+  };
+
+  return {
+    displayGame: displayGame(),
+    selectPlayerMove: selectPlayerMove(),
+    addGameBoard: addGameBoard(),
+  };
 })();
