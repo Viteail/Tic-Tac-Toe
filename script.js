@@ -1,5 +1,6 @@
 const gameboardDisplay = document.querySelector(".gameboard");
 const gameWrapper = document.querySelector(".game");
+const modal = document.querySelector(".modal");
 
 const game = (() => {
   const storage = {
@@ -7,6 +8,8 @@ const game = (() => {
     player1: ["ｏ"],
     player2: ["ｘ"],
     playerMove: [],
+    winner: "",
+    tie: "",
   };
 
   const addGameBoard = () => {
@@ -32,6 +35,7 @@ const game = (() => {
       storage.playerMove = storage.player2;
       buttonX.style.display = "none";
       buttonO.style.display = "none";
+      return displayGame();
     });
 
     buttonO.addEventListener("click", () => {
@@ -39,6 +43,7 @@ const game = (() => {
       storage.playerMove = storage.player1;
       buttonX.style.display = "none";
       buttonO.style.display = "none";
+      return displayGame();
     });
 
     gameWrapper.appendChild(buttonX);
@@ -97,7 +102,8 @@ const game = (() => {
         storage.gameboard[4].textContent === "ｏ" &&
         storage.gameboard[6].textContent === "ｏ")
     ) {
-      console.log("Player 1 ez won");
+      storage.winner = "Player 1";
+      restartGame();
     }
     // x (player 2) win condition
     else if (
@@ -129,10 +135,12 @@ const game = (() => {
         storage.gameboard[4].textContent === "ｘ" &&
         storage.gameboard[6].textContent === "ｘ")
     ) {
-      console.log("Player 2 ez won");
+      storage.winner = "Player 2";
+      restartGame();
     }
     // tie
     else if (
+      // check if every boxes are not empty
       storage.gameboard[0].textContent !== "" &&
       storage.gameboard[1].textContent !== "" &&
       storage.gameboard[2].textContent !== "" &&
@@ -143,12 +151,47 @@ const game = (() => {
       storage.gameboard[7].textContent !== "" &&
       storage.gameboard[8].textContent !== ""
     ) {
-      console.log("its a tie");
+      storage.tie = "It's a Tie!";
+      restartGame();
     }
   };
 
+  const restartGame = () => {
+    // modal content
+    const restartGameModal = document.createElement("div");
+    restartGameModal.classList.add("restartgamemodal");
+    modal.appendChild(restartGameModal);
+    modal.style.display = "block";
+
+    // show the winner or tie
+    const paraWinner = document.createElement("p");
+    paraWinner.classList.add("parawinner");
+    if (storage.winner !== "") {
+      paraWinner.textContent = `Congratulations ${storage.winner} has won!`;
+      storage.winner = "";
+    } else {
+      paraWinner.textContent = storage.tie;
+      storage.tie = "";
+    }
+    restartGameModal.appendChild(paraWinner);
+
+    // restart btn
+    const restartBtn = document.createElement("button");
+    restartBtn.classList.add("restartbtn");
+    restartBtn.textContent = "Restart";
+    restartGameModal.appendChild(restartBtn);
+
+    restartBtn.addEventListener('click',  () => {
+      modal.style.display = "none";
+      while (gameboardDisplay.firstChild) {
+        gameboardDisplay.removeChild(gameboardDisplay.firstChild);
+      }
+      storage.gameboard = [];
+      addGameBoard();
+    })
+  };
+
   return {
-    displayGame: displayGame(),
     selectPlayerMove: selectPlayerMove(),
     addGameBoard: addGameBoard(),
   };

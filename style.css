@@ -3,6 +3,12 @@ body {
   min-height: 100vh;
 }
 
+:root {
+  --white-color: #ffffff;
+  --black-color: #000000;
+  --gray-color: #808080;
+}
+
 .wrapper {
   display: flex;
   justify-content: center;
@@ -24,8 +30,58 @@ body {
   align-items: center;
   font-size: 3.5rem;
   cursor: pointer;
-  border: 1px solid black;
+  border: 1px solid var(--black-color);
 }
 
 .btnX, .btnO {
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: var(--gray-color);
+}
+
+.restartgamemodal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 35%;
+  min-height: 25%;
+  padding: 40px;
+  border-radius: 15px;
+  transform: translate(-50%, -50%);
+  background-color: var(--white-color);
+  animation: appearModal 1s;
+}
+
+.parawinner {
+  text-align: center;
+  font-size: 2rem;
+}
+
+.restartbtn {
+  cursor: pointer;
+  font-size: 2rem;
+  border: 0;
+  background-color: var(--white-color);
+}
+
+@keyframes appearModal{
+  0% {opacity: 0;}
+  25% {opacity: 0.3;}
+  50% {opacity: 0.6;}
+  75% {opacity: 0.9;}
+  100% {opacity: 1;}
 }
