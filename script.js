@@ -131,6 +131,20 @@ const game = (() => {
     ) {
       console.log("Player 2 ez won");
     }
+    // tie
+    else if (
+      storage.gameboard[0].textContent !== "" &&
+      storage.gameboard[1].textContent !== "" &&
+      storage.gameboard[2].textContent !== "" &&
+      storage.gameboard[3].textContent !== "" &&
+      storage.gameboard[4].textContent !== "" &&
+      storage.gameboard[5].textContent !== "" &&
+      storage.gameboard[6].textContent !== "" &&
+      storage.gameboard[7].textContent !== "" &&
+      storage.gameboard[8].textContent !== ""
+    ) {
+      console.log("its a tie");
+    }
   };
 
   return {
