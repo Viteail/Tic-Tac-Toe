@@ -1,6 +1,6 @@
 const gameboardDisplay = document.querySelector(".gameboard");
 const gameWrapper = document.querySelector(".game");
-const modal = document.querySelector(".modal");
+const wrapper = document.querySelector(".wrapper");
 
 const game = (() => {
   const storage = {
@@ -11,6 +11,15 @@ const game = (() => {
     winner: "",
     tie: "",
   };
+
+  // modals
+  const modalRestart = document.createElement("div");
+  modalRestart.classList.add("modal");
+  wrapper.appendChild(modalRestart);
+
+  const modalSelect = document.createElement("div");
+  modalSelect.classList.add("modal");
+  wrapper.appendChild(modalSelect);
 
   const addGameBoard = () => {
     for (let i = 0; i < 9; i++) {
@@ -23,6 +32,23 @@ const game = (() => {
   };
 
   const selectPlayerMove = () => {
+    // modal content
+    const selectPlayerModal = document.createElement("div");
+    selectPlayerModal.classList.add("selectplayermodal");
+    modalSelect.appendChild(selectPlayerModal);
+    modalSelect.style.display = "block";
+
+    // paraSelectPlayer
+    const paraSelectPlayer = document.createElement("p");
+    paraSelectPlayer.classList.add("paraselectplayer");
+    paraSelectPlayer.textContent = "Select your move!";
+    selectPlayerModal.appendChild(paraSelectPlayer);
+
+    // btn-wrapper
+    const btnWrapper = document.createElement("div");
+    btnWrapper.classList.add("btnwrapper");
+    selectPlayerModal.appendChild(btnWrapper);
+
     const buttonX = document.createElement("button");
     buttonX.textContent = "ｘ";
     buttonX.classList.add("btnX");
@@ -35,6 +61,7 @@ const game = (() => {
       storage.playerMove = storage.player2;
       buttonX.style.display = "none";
       buttonO.style.display = "none";
+      modalSelect.style.display = "none";
       return displayGame();
     });
 
@@ -43,11 +70,12 @@ const game = (() => {
       storage.playerMove = storage.player1;
       buttonX.style.display = "none";
       buttonO.style.display = "none";
+      modalSelect.style.display = "none";
       return displayGame();
     });
 
-    gameWrapper.appendChild(buttonX);
-    gameWrapper.appendChild(buttonO);
+    btnWrapper.appendChild(buttonX);
+    btnWrapper.appendChild(buttonO);
   };
 
   const switchPlayerMove = () => {
@@ -160,8 +188,9 @@ const game = (() => {
     // modal content
     const restartGameModal = document.createElement("div");
     restartGameModal.classList.add("restartgamemodal");
-    modal.appendChild(restartGameModal);
-    modal.style.display = "block";
+
+    modalRestart.appendChild(restartGameModal);
+    modalRestart.style.display = "block";
 
     // show the winner or tie
     const paraWinner = document.createElement("p");
@@ -181,14 +210,16 @@ const game = (() => {
     restartBtn.textContent = "Restart";
     restartGameModal.appendChild(restartBtn);
 
-    restartBtn.addEventListener('click',  () => {
-      modal.style.display = "none";
+    restartBtn.addEventListener("click", () => {
+      modalRestart.style.display = "none";
       while (gameboardDisplay.firstChild) {
         gameboardDisplay.removeChild(gameboardDisplay.firstChild);
       }
+      storage.playerMove = [];
       storage.gameboard = [];
       addGameBoard();
-    })
+      selectPlayerMove();
+    });
   };
 
   return {
