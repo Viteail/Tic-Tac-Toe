@@ -16,6 +16,19 @@ body {
   height: 100vh;
 }
 
+.game {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: calc(350px * 3);
+}
+
+.player1content,
+.player2content {
+  text-align: center;
+  width: 100%;
+}
+
 .gameboard {
   display: grid;
   grid-template-columns: repeat(3, calc(350px / 3));
@@ -45,6 +58,42 @@ body {
   background-color: var(--gray-color);
 }
 
+.startgamemodal {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  position: absolute;
+  gap: 20px;
+  left: 50%;
+  top: 50%;
+  width: 40%;
+  min-height: 40%;
+  padding: 40px;
+  border-radius: 15px;
+  transform: translate(-50%, -50%);
+  background-color: var(--white-color);
+  animation: appearModal 1s;
+}
+
+.paragamename {
+  font-size: 2.5rem;
+}
+
+.btnpvp,
+.btnpve {
+  cursor: pointer;
+  border: none;
+  font-size: 1.5rem;
+  width: 200px;
+  transition: 200ms;
+  background-color: var(--white-color);
+}
+
+.btnpvp:hover,
+.btnpve:hover {
+  scale: 1.1;
+}
+
 .restartgamemodal {
   display: flex;
   align-items: center;
@@ -72,7 +121,12 @@ body {
   cursor: pointer;
   font-size: 2rem;
   border: 0;
+  transition: 200ms;
   background-color: var(--white-color);
+}
+
+.restartbtn:hover {
+  scale: 1.1;
 }
 
 .selectplayermodal {
@@ -84,7 +138,7 @@ body {
   top: 50%;
   transform: translate(-50%, -50%);
   width: 35%;
-  min-height: 40%;
+  min-height: 35%;
   padding: 40px;
   border-radius: 15px;
   font-size: 2rem;
@@ -97,25 +151,42 @@ body {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  margin-top: 10%;
 }
 
-.btnX, .btnO {
+.btnX,
+.btnO {
   display: block;
   cursor: pointer;
   border: none;
-  width: 75px;
-  height: 50px;
-  font-size: 2rem;
+  font-size: 1.8rem;
+  transition: 200ms;
+  background-color: var(--white-color);
 }
 
-.paraselectplayer {
+.btnX:hover,
+.btnO:hover {
+  scale: 1.1;
 }
 
-@keyframes appearModal{
-  0% {opacity: 0;}
-  25% {opacity: 0.3;}
-  50% {opacity: 0.6;}
-  75% {opacity: 0.9;}
-  100% {opacity: 1;}
+.paraplayer1,
+.paraplayer2 {
+  transition: 200ms;
+}
+
+@keyframes appearModal {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  75% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 1;
+  }
 }
