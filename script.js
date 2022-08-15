@@ -10,8 +10,10 @@ const game = (() => {
     player1: ['ｘ'],
     player2: ['ｏ'],
     playerMove: [],
+    aiMove: [],
     winner: '',
     tie: '',
+    ai: false,
   };
 
   // modals
@@ -66,6 +68,13 @@ const game = (() => {
       removeModalChilds();
       selectPlayer();
     });
+
+    btnPvE.addEventListener('click', () => {
+      storage.ai = true;
+      modalStart.style.display = 'none';
+      removeModalChilds();
+      selectPlayer();
+    });
   };
 
   const selectPlayer = () => {
@@ -97,14 +106,22 @@ const game = (() => {
       storage.playerMove = storage.player1;
       modalSelect.style.display = 'none';
       removeModalChilds();
-      return displayGame();
+      if (storage.ai === false) {
+        return displayGame();
+      } else if (storage.ai === true) {
+        return markSpotvsAI();
+      }
     });
 
     buttonO.addEventListener('click', () => {
       storage.playerMove = storage.player2;
       modalSelect.style.display = 'none';
       removeModalChilds();
-      return displayGame();
+      if (storage.ai === false) {
+        return displayGame();
+      } else if (storage.ai === true) {
+        return markSpotvsAI();
+      }
     });
 
     btnWrapper.appendChild(buttonX);
@@ -112,14 +129,26 @@ const game = (() => {
   };
 
   const switchPlayerMove = () => {
-    if (storage.playerMove === storage.player1) {
-      storage.playerMove = [];
-      storage.playerMove = storage.player2;
-      showPlayer();
-    } else if (storage.playerMove === storage.player2) {
-      storage.playerMove = [];
-      storage.playerMove = storage.player1;
-      showPlayer();
+    if (storage.ai === false) {
+      if (storage.playerMove === storage.player1) {
+        storage.playerMove = storage.player2;
+        showPlayer();
+      } else if (storage.playerMove === storage.player2) {
+        storage.playerMove = storage.player1;
+        showPlayer();
+      }
+    } else if (storage.ai === true) {
+      if (storage.playerMove === storage.player1) {
+        storage.playerMove = [];
+        storage.aiMove = storage.player2;
+        markSpotAI(storage.aiMove);
+        showPlayer();
+      } else if (storage.playerMove === storage.player2) {
+        storage.playerMove = [];
+        storage.aiMove = storage.player1;
+        markSpotAI(storage.aiMove);
+        showPlayer();
+      }
     }
   };
 
@@ -138,12 +167,14 @@ const game = (() => {
   };
 
   const showPlayer = () => {
-    if (storage.playerMove === storage.player1) {
-      paraplayer1.style.fontSize = '2rem';
-      paraplayer2.style.fontSize = '1rem';
-    } else if (storage.playerMove === storage.player2) {
-      paraplayer2.style.fontSize = '2rem';
-      paraplayer1.style.fontSize = '1rem';
+    if (storage.ai === false) {
+      if (storage.playerMove === storage.player1) {
+        paraplayer1.style.fontSize = '2rem';
+        paraplayer2.style.fontSize = '1rem';
+      } else if (storage.playerMove === storage.player2) {
+        paraplayer2.style.fontSize = '2rem';
+        paraplayer1.style.fontSize = '1rem';
+      }
     }
   };
 
@@ -269,6 +300,73 @@ const game = (() => {
       addGameBoard();
       selectPlayer();
     });
+  };
+
+  const markSpotvsAI = () => {
+    if (storage.playerMove === storage.player2) {
+      switchPlayerMove();
+    }
+    gameboardDisplay.addEventListener('click', (e) => {
+      if (e.target.classList.contains('box') && e.target.textContent === '') {
+        e.target.textContent = storage.playerMove;
+        switchPlayerMove();
+
+        win();
+      }
+    });
+  };
+
+  const markSpotAI = (aiMove) => {
+    const box = storage.gameboard;
+    if (aiMove === storage.player2) {
+      if (
+        box[0].textContent !== '' &&
+        box[1].textContent !== '' &&
+        box[2].textContent !== '' &&
+        box[3].textContent !== '' &&
+        box[4].textContent !== '' &&
+        box[5].textContent !== '' &&
+        box[6].textContent !== '' &&
+        box[7].textContent !== '' &&
+        box[8].textContent !== ''
+      ) {
+        checking = false;
+      }
+      let checking = true;
+      while (checking) {
+        let random = Math.floor(Math.random() * 9);
+        if (storage.gameboard[random].textContent === '') {
+          storage.gameboard[random].textContent = aiMove;
+          checking = false;
+        }
+      }
+      storage.playerMove = storage.player1;
+      win();
+    } else if (aiMove === storage.player1) {
+      if (
+        box[0].textContent !== '' &&
+        box[1].textContent !== '' &&
+        box[2].textContent !== '' &&
+        box[3].textContent !== '' &&
+        box[4].textContent !== '' &&
+        box[5].textContent !== '' &&
+        box[6].textContent !== '' &&
+        box[7].textContent !== '' &&
+        box[8].textContent !== ''
+      ) {
+        checking = false;
+      }
+      let checking = true;
+      while (checking) {
+        let random = Math.floor(Math.random() * 9);
+        if (storage.gameboard[random].textContent === '') {
+          storage.gameboard[random].textContent = aiMove;
+          checking = false;
+        }
+      }
+      storage.playerMove = storage.player2;
+      win();
+    }
   };
 
   const removeModalChilds = () => {
