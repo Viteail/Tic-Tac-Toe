@@ -17,16 +17,20 @@ body {
 }
 
 .game {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: calc(350px * 3);
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(3, 350px);
+}
+
+.returnbtn {
+  grid-column: 2 / 3;
 }
 
 .player1content,
 .player2content {
-  text-align: center;
-  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .gameboard {

@@ -29,6 +29,25 @@ const game = (() => {
   modalStart.classList.add('modal');
   wrapper.appendChild(modalStart);
 
+  const returnBtn = document.createElement('button');
+  returnBtn.classList.add('returnbtn');
+  returnBtn.textContent = 'Return to start menu';
+  gameWrapper.appendChild(returnBtn);
+  returnBtn.addEventListener('click', () => {
+    storage.tie = '';
+    storage.winner = '';
+    storage.playerMove = [];
+    storage.aiMove = [];
+    storage.gameboard = [];
+    paraplayer1.textContent = '';
+    paraplayer2.textContent = '';
+    removeModalChilds();
+    while (gameboardDisplay.firstChild) {
+      gameboardDisplay.removeChild(gameboardDisplay.firstChild);
+    }
+    return startGame();
+  });
+
   const addGameBoard = () => {
     for (let i = 0; i < 9; i++) {
       const box = document.createElement('div');
@@ -65,6 +84,7 @@ const game = (() => {
 
     btnPvP.addEventListener('click', () => {
       modalStart.style.display = 'none';
+      addGameBoard();
       removeModalChilds();
       selectPlayer();
     });
@@ -72,6 +92,7 @@ const game = (() => {
     btnPvE.addEventListener('click', () => {
       storage.ai = true;
       modalStart.style.display = 'none';
+      addGameBoard();
       removeModalChilds();
       selectPlayer();
     });
@@ -138,16 +159,22 @@ const game = (() => {
         showPlayer();
       }
     } else if (storage.ai === true) {
-      if (storage.playerMove === storage.player1) {
-        storage.playerMove = [];
-        storage.aiMove = storage.player2;
-        markSpotAI(storage.aiMove);
-        showPlayer();
-      } else if (storage.playerMove === storage.player2) {
-        storage.playerMove = [];
-        storage.aiMove = storage.player1;
-        markSpotAI(storage.aiMove);
-        showPlayer();
+      if (storage.winner === '' && storage.tie === '') {
+        if (storage.playerMove === storage.player1) {
+          storage.playerMove = [];
+          storage.aiMove = storage.player2;
+          setTimeout(() => {
+            markSpotAI(storage.aiMove);
+          }, 1500);
+          showPlayer();
+        } else if (storage.playerMove === storage.player2) {
+          storage.playerMove = [];
+          storage.aiMove = storage.player1;
+          setTimeout(() => {
+            markSpotAI(storage.aiMove);
+          }, 1500);
+          showPlayer();
+        }
       }
     }
   };
@@ -168,12 +195,35 @@ const game = (() => {
 
   const showPlayer = () => {
     if (storage.ai === false) {
+      paraplayer1.textContent = 'Player 1';
+      paraplayer2.textContent = 'Player 2';
       if (storage.playerMove === storage.player1) {
         paraplayer1.style.fontSize = '2rem';
         paraplayer2.style.fontSize = '1rem';
       } else if (storage.playerMove === storage.player2) {
         paraplayer2.style.fontSize = '2rem';
         paraplayer1.style.fontSize = '1rem';
+      }
+    } else if (storage.ai === true) {
+      if (storage.playerMove === storage.player1) {
+        paraplayer1.textContent = 'Player 1';
+        paraplayer2.textContent = 'AI';
+      } else if (storage.playerMove === storage.player2) {
+        paraplayer1.textContent = 'AI';
+        paraplayer2.textContent = 'Player 2';
+      }
+      if (storage.playerMove === storage.player1) {
+        paraplayer1.style.fontSize = '2rem';
+        paraplayer2.style.fontSize = '1rem';
+      } else if (storage.aiMove === storage.player2) {
+        paraplayer2.style.fontSize = '2rem';
+        paraplayer1.style.fontSize = '1rem';
+      } else if (storage.playerMove === storage.player2) {
+        paraplayer2.style.fontSize = '2rem';
+        paraplayer1.style.fontSize = '1rem';
+      } else if (storage.aiMove === storage.player1) {
+        paraplayer1.style.fontSize = '2rem';
+        paraplayer2.style.fontSize = '1rem';
       }
     }
   };
@@ -182,32 +232,32 @@ const game = (() => {
     // ｘ (player 1) win condition
     if (
       // check for 3-in-a-row horizontally
-      (storage.gameboard[0].textContent === 'ｘ' &&
-        storage.gameboard[1].textContent === 'ｘ' &&
-        storage.gameboard[2].textContent === 'ｘ') ||
-      (storage.gameboard[3].textContent === 'ｘ' &&
-        storage.gameboard[4].textContent === 'ｘ' &&
-        storage.gameboard[5].textContent === 'ｘ') ||
-      (storage.gameboard[6].textContent === 'ｘ' &&
-        storage.gameboard[7].textContent === 'ｘ' &&
-        storage.gameboard[8].textContent === 'ｘ') ||
+      (storage.gameboard[0].textContent === `${storage.player1}` &&
+        storage.gameboard[1].textContent === `${storage.player1}` &&
+        storage.gameboard[2].textContent === `${storage.player1}`) ||
+      (storage.gameboard[3].textContent === `${storage.player1}` &&
+        storage.gameboard[4].textContent === `${storage.player1}` &&
+        storage.gameboard[5].textContent === `${storage.player1}`) ||
+      (storage.gameboard[6].textContent === `${storage.player1}` &&
+        storage.gameboard[7].textContent === `${storage.player1}` &&
+        storage.gameboard[8].textContent === `${storage.player1}`) ||
       // check for 3-in-a-row vertically
-      (storage.gameboard[0].textContent === 'ｘ' &&
-        storage.gameboard[3].textContent === 'ｘ' &&
-        storage.gameboard[6].textContent === 'ｘ') ||
-      (storage.gameboard[1].textContent === 'ｘ' &&
-        storage.gameboard[4].textContent === 'ｘ' &&
-        storage.gameboard[7].textContent === 'ｘ') ||
-      (storage.gameboard[2].textContent === 'ｘ' &&
-        storage.gameboard[5].textContent === 'ｘ' &&
-        storage.gameboard[8].textContent === 'ｘ') ||
+      (storage.gameboard[0].textContent === `${storage.player1}` &&
+        storage.gameboard[3].textContent === `${storage.player1}` &&
+        storage.gameboard[6].textContent === `${storage.player1}`) ||
+      (storage.gameboard[1].textContent === `${storage.player1}` &&
+        storage.gameboard[4].textContent === `${storage.player1}` &&
+        storage.gameboard[7].textContent === `${storage.player1}`) ||
+      (storage.gameboard[2].textContent === `${storage.player1}` &&
+        storage.gameboard[5].textContent === `${storage.player1}` &&
+        storage.gameboard[8].textContent === `${storage.player1}`) ||
       // check for 3-in-a-row diagonally
-      (storage.gameboard[0].textContent === 'ｘ' &&
-        storage.gameboard[4].textContent === 'ｘ' &&
-        storage.gameboard[8].textContent === 'ｘ') ||
-      (storage.gameboard[2].textContent === 'ｘ' &&
-        storage.gameboard[4].textContent === 'ｘ' &&
-        storage.gameboard[6].textContent === 'ｘ')
+      (storage.gameboard[0].textContent === `${storage.player1}` &&
+        storage.gameboard[4].textContent === `${storage.player1}` &&
+        storage.gameboard[8].textContent === `${storage.player1}`) ||
+      (storage.gameboard[2].textContent === `${storage.player1}` &&
+        storage.gameboard[4].textContent === `${storage.player1}` &&
+        storage.gameboard[6].textContent === `${storage.player1}`)
     ) {
       storage.winner = 'Player 1';
       restartGame();
@@ -215,32 +265,32 @@ const game = (() => {
     // 0 (player 2) win condition
     else if (
       // check for 3-in-a-row horizontally
-      (storage.gameboard[0].textContent === 'ｏ' &&
-        storage.gameboard[1].textContent === 'ｏ' &&
-        storage.gameboard[2].textContent === 'ｏ') ||
-      (storage.gameboard[3].textContent === 'ｏ' &&
-        storage.gameboard[4].textContent === 'ｏ' &&
-        storage.gameboard[5].textContent === 'ｏ') ||
-      (storage.gameboard[6].textContent === 'ｏ' &&
-        storage.gameboard[7].textContent === 'ｏ' &&
-        storage.gameboard[8].textContent === 'ｏ') ||
+      (storage.gameboard[0].textContent === `${storage.player2}` &&
+        storage.gameboard[1].textContent === `${storage.player2}` &&
+        storage.gameboard[2].textContent === `${storage.player2}`) ||
+      (storage.gameboard[3].textContent === `${storage.player2}` &&
+        storage.gameboard[4].textContent === `${storage.player2}` &&
+        storage.gameboard[5].textContent === `${storage.player2}`) ||
+      (storage.gameboard[6].textContent === `${storage.player2}` &&
+        storage.gameboard[7].textContent === `${storage.player2}` &&
+        storage.gameboard[8].textContent === `${storage.player2}`) ||
       // check for 3-in-a-row vertically
-      (storage.gameboard[0].textContent === 'ｏ' &&
-        storage.gameboard[3].textContent === 'ｏ' &&
-        storage.gameboard[6].textContent === 'ｏ') ||
-      (storage.gameboard[1].textContent === 'ｏ' &&
-        storage.gameboard[4].textContent === 'ｏ' &&
-        storage.gameboard[7].textContent === 'ｏ') ||
-      (storage.gameboard[2].textContent === 'ｏ' &&
-        storage.gameboard[5].textContent === 'ｏ' &&
-        storage.gameboard[8].textContent === 'ｏ') ||
+      (storage.gameboard[0].textContent === `${storage.player2}` &&
+        storage.gameboard[3].textContent === `${storage.player2}` &&
+        storage.gameboard[6].textContent === `${storage.player2}`) ||
+      (storage.gameboard[1].textContent === `${storage.player2}` &&
+        storage.gameboard[4].textContent === `${storage.player2}` &&
+        storage.gameboard[7].textContent === `${storage.player2}`) ||
+      (storage.gameboard[2].textContent === `${storage.player2}` &&
+        storage.gameboard[5].textContent === `${storage.player2}` &&
+        storage.gameboard[8].textContent === `${storage.player2}`) ||
       // check for 3-in-a-row diagonally
-      (storage.gameboard[0].textContent === 'ｏ' &&
-        storage.gameboard[4].textContent === 'ｏ' &&
-        storage.gameboard[8].textContent === 'ｏ') ||
-      (storage.gameboard[2].textContent === 'ｏ' &&
-        storage.gameboard[4].textContent === 'ｏ' &&
-        storage.gameboard[6].textContent === 'ｏ')
+      (storage.gameboard[0].textContent === `${storage.player2}` &&
+        storage.gameboard[4].textContent === `${storage.player2}` &&
+        storage.gameboard[8].textContent === `${storage.player2}`) ||
+      (storage.gameboard[2].textContent === `${storage.player2}` &&
+        storage.gameboard[4].textContent === `${storage.player2}` &&
+        storage.gameboard[6].textContent === `${storage.player2}`)
     ) {
       storage.winner = 'Player 2';
       restartGame();
@@ -276,10 +326,8 @@ const game = (() => {
     paraWinner.classList.add('parawinner');
     if (storage.winner !== '') {
       paraWinner.textContent = `Congratulations ${storage.winner} has won!`;
-      storage.winner = '';
     } else {
       paraWinner.textContent = storage.tie;
-      storage.tie = '';
     }
     restartGameModal.appendChild(paraWinner);
 
@@ -294,7 +342,10 @@ const game = (() => {
       while (gameboardDisplay.firstChild) {
         gameboardDisplay.removeChild(gameboardDisplay.firstChild);
       }
+      storage.tie = '';
+      storage.winner = '';
       storage.playerMove = [];
+      storage.aiMove = [];
       storage.gameboard = [];
       removeModalChilds();
       addGameBoard();
@@ -303,15 +354,16 @@ const game = (() => {
   };
 
   const markSpotvsAI = () => {
+    showPlayer();
     if (storage.playerMove === storage.player2) {
       switchPlayerMove();
     }
     gameboardDisplay.addEventListener('click', (e) => {
       if (e.target.classList.contains('box') && e.target.textContent === '') {
         e.target.textContent = storage.playerMove;
-        switchPlayerMove();
-
+        console.log('zialla');
         win();
+        switchPlayerMove();
       }
     });
   };
@@ -340,8 +392,8 @@ const game = (() => {
           checking = false;
         }
       }
+      console.log('beezsd');
       storage.playerMove = storage.player1;
-      win();
     } else if (aiMove === storage.player1) {
       if (
         box[0].textContent !== '' &&
@@ -364,9 +416,11 @@ const game = (() => {
           checking = false;
         }
       }
+      console.log('beez');
       storage.playerMove = storage.player2;
-      win();
     }
+    showPlayer();
+    win();
   };
 
   const removeModalChilds = () => {
@@ -383,6 +437,5 @@ const game = (() => {
 
   return {
     startGame: startGame(),
-    addGameBoard: addGameBoard(),
   };
 })();
