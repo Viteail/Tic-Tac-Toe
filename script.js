@@ -34,6 +34,7 @@ const game = (() => {
   returnBtn.textContent = 'Return to start menu';
   gameWrapper.appendChild(returnBtn);
   returnBtn.addEventListener('click', () => {
+    storage.ai = false;
     storage.tie = '';
     storage.winner = '';
     storage.playerMove = [];
@@ -354,73 +355,77 @@ const game = (() => {
   };
 
   const markSpotvsAI = () => {
-    showPlayer();
-    if (storage.playerMove === storage.player2) {
-      switchPlayerMove();
-    }
-    gameboardDisplay.addEventListener('click', (e) => {
-      if (e.target.classList.contains('box') && e.target.textContent === '') {
-        e.target.textContent = storage.playerMove;
-        console.log('zialla');
-        win();
+    if (storage.ai === true) {
+      showPlayer();
+      if (storage.playerMove === storage.player2) {
         switchPlayerMove();
       }
-    });
+      gameboardDisplay.addEventListener('click', (e) => {
+        if (e.target.classList.contains('box') && e.target.textContent === '') {
+          e.target.textContent = storage.playerMove;
+          console.log('zialla');
+          win();
+          switchPlayerMove();
+        }
+      });
+    }
   };
 
   const markSpotAI = (aiMove) => {
-    const box = storage.gameboard;
-    if (aiMove === storage.player2) {
-      if (
-        box[0].textContent !== '' &&
-        box[1].textContent !== '' &&
-        box[2].textContent !== '' &&
-        box[3].textContent !== '' &&
-        box[4].textContent !== '' &&
-        box[5].textContent !== '' &&
-        box[6].textContent !== '' &&
-        box[7].textContent !== '' &&
-        box[8].textContent !== ''
-      ) {
-        checking = false;
-      }
-      let checking = true;
-      while (checking) {
-        let random = Math.floor(Math.random() * 9);
-        if (storage.gameboard[random].textContent === '') {
-          storage.gameboard[random].textContent = aiMove;
+    if (storage.ai === true) {
+      const box = storage.gameboard;
+      if (aiMove === storage.player2) {
+        if (
+          box[0].textContent !== '' &&
+          box[1].textContent !== '' &&
+          box[2].textContent !== '' &&
+          box[3].textContent !== '' &&
+          box[4].textContent !== '' &&
+          box[5].textContent !== '' &&
+          box[6].textContent !== '' &&
+          box[7].textContent !== '' &&
+          box[8].textContent !== ''
+        ) {
           checking = false;
         }
-      }
-      console.log('beezsd');
-      storage.playerMove = storage.player1;
-    } else if (aiMove === storage.player1) {
-      if (
-        box[0].textContent !== '' &&
-        box[1].textContent !== '' &&
-        box[2].textContent !== '' &&
-        box[3].textContent !== '' &&
-        box[4].textContent !== '' &&
-        box[5].textContent !== '' &&
-        box[6].textContent !== '' &&
-        box[7].textContent !== '' &&
-        box[8].textContent !== ''
-      ) {
-        checking = false;
-      }
-      let checking = true;
-      while (checking) {
-        let random = Math.floor(Math.random() * 9);
-        if (storage.gameboard[random].textContent === '') {
-          storage.gameboard[random].textContent = aiMove;
+        let checking = true;
+        while (checking) {
+          let random = Math.floor(Math.random() * 9);
+          if (storage.gameboard[random].textContent === '') {
+            storage.gameboard[random].textContent = aiMove;
+            checking = false;
+          }
+        }
+        console.log('beezsd');
+        storage.playerMove = storage.player1;
+      } else if (aiMove === storage.player1) {
+        if (
+          box[0].textContent !== '' &&
+          box[1].textContent !== '' &&
+          box[2].textContent !== '' &&
+          box[3].textContent !== '' &&
+          box[4].textContent !== '' &&
+          box[5].textContent !== '' &&
+          box[6].textContent !== '' &&
+          box[7].textContent !== '' &&
+          box[8].textContent !== ''
+        ) {
           checking = false;
         }
+        let checking = true;
+        while (checking) {
+          let random = Math.floor(Math.random() * 9);
+          if (storage.gameboard[random].textContent === '') {
+            storage.gameboard[random].textContent = aiMove;
+            checking = false;
+          }
+        }
+        console.log('beez');
+        storage.playerMove = storage.player2;
       }
-      console.log('beez');
-      storage.playerMove = storage.player2;
+      showPlayer();
+      win();
     }
-    showPlayer();
-    win();
   };
 
   const removeModalChilds = () => {
