@@ -1,0 +1,196 @@
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+:root {
+  --white-color: #ffffff;
+  --black-color: #000000;
+  --gray-color: #808080;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.game {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(3, 350px);
+}
+
+.returnbtn {
+  grid-column: 2 / 3;
+}
+
+.player1content,
+.player2content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gameboard {
+  display: grid;
+  grid-template-columns: repeat(3, calc(350px / 3));
+  grid-template-rows: repeat(3, calc(350px / 3));
+  height: 350px;
+  width: 350px;
+}
+
+.box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3.5rem;
+  cursor: pointer;
+  border: 1px solid var(--black-color);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: var(--gray-color);
+}
+
+.startgamemodal {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  position: absolute;
+  gap: 20px;
+  left: 50%;
+  top: 50%;
+  width: 40%;
+  min-height: 40%;
+  padding: 40px;
+  border-radius: 15px;
+  transform: translate(-50%, -50%);
+  background-color: var(--white-color);
+  animation: appearModal 1s;
+}
+
+.paragamename {
+  font-size: 2.5rem;
+}
+
+.btnpvp,
+.btnpve {
+  cursor: pointer;
+  border: none;
+  font-size: 1.5rem;
+  width: 200px;
+  transition: 200ms;
+  background-color: var(--white-color);
+}
+
+.btnpvp:hover,
+.btnpve:hover {
+  scale: 1.1;
+}
+
+.restartgamemodal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: absolute;
+  gap: 20px;
+  left: 50%;
+  top: 50%;
+  width: 35%;
+  min-height: 25%;
+  padding: 40px;
+  border-radius: 15px;
+  transform: translate(-50%, -50%);
+  background-color: var(--white-color);
+  animation: appearModal 1s;
+}
+
+.parawinner {
+  text-align: center;
+  font-size: 2rem;
+}
+
+.restartbtn {
+  cursor: pointer;
+  font-size: 2rem;
+  border: 0;
+  transition: 200ms;
+  background-color: var(--white-color);
+}
+
+.restartbtn:hover {
+  scale: 1.1;
+}
+
+.selectplayermodal {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 35%;
+  min-height: 35%;
+  padding: 40px;
+  border-radius: 15px;
+  font-size: 2rem;
+  background-color: var(--white-color);
+  animation: appearModal 1s;
+}
+
+.btnwrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.btnX,
+.btnO {
+  display: block;
+  cursor: pointer;
+  border: none;
+  font-size: 1.8rem;
+  transition: 200ms;
+  background-color: var(--white-color);
+}
+
+.btnX:hover,
+.btnO:hover {
+  scale: 1.1;
+}
+
+.paraplayer1,
+.paraplayer2 {
+  transition: 200ms;
+}
+
+@keyframes appearModal {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  75% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 1;
+  }
+}
