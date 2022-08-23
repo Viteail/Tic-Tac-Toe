@@ -29,10 +29,14 @@ const game = (() => {
   modalStart.classList.add('modal');
   wrapper.appendChild(modalStart);
 
+  const btnWrapper = document.createElement('div');
+  btnWrapper.classList.add('rtnbtnwrapper');
+  gameWrapper.appendChild(btnWrapper);
+
   const returnBtn = document.createElement('button');
   returnBtn.classList.add('returnbtn');
   returnBtn.textContent = 'Return to start menu';
-  gameWrapper.appendChild(returnBtn);
+  btnWrapper.appendChild(returnBtn);
   returnBtn.addEventListener('click', () => {
     storage.ai = false;
     storage.tie = '';
@@ -261,6 +265,9 @@ const game = (() => {
         storage.gameboard[6].textContent === `${storage.player1}`)
     ) {
       storage.winner = 'Player 1';
+      if (storage.aiMove === storage.player1) {
+        storage.winner = 'AI';
+      }
       restartGame();
     }
     // 0 (player 2) win condition
@@ -294,6 +301,9 @@ const game = (() => {
         storage.gameboard[6].textContent === `${storage.player2}`)
     ) {
       storage.winner = 'Player 2';
+      if (storage.aiMove === storage.player2) {
+        storage.winner = 'AI';
+      }
       restartGame();
     }
     // tie
@@ -326,7 +336,7 @@ const game = (() => {
     const paraWinner = document.createElement('p');
     paraWinner.classList.add('parawinner');
     if (storage.winner !== '') {
-      paraWinner.textContent = `Congratulations ${storage.winner} has won!`;
+      paraWinner.textContent = `${storage.winner} has won!`;
     } else {
       paraWinner.textContent = storage.tie;
     }
@@ -363,7 +373,6 @@ const game = (() => {
       gameboardDisplay.addEventListener('click', (e) => {
         if (e.target.classList.contains('box') && e.target.textContent === '') {
           e.target.textContent = storage.playerMove;
-          console.log('zialla');
           win();
           switchPlayerMove();
         }
@@ -396,7 +405,6 @@ const game = (() => {
             checking = false;
           }
         }
-        console.log('beezsd');
         storage.playerMove = storage.player1;
       } else if (aiMove === storage.player1) {
         if (
@@ -420,7 +428,6 @@ const game = (() => {
             checking = false;
           }
         }
-        console.log('beez');
         storage.playerMove = storage.player2;
       }
       showPlayer();
